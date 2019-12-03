@@ -13,11 +13,13 @@ namespace VideoRentalSystem
 {
     public partial class Form1 : Form
     {
+        //Starting new SQL Connection
         SqlConnection sqlConnection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\OEM\\Desktop\\VideoRentalSystem\\database.mdf;Integrated Security=True");
         public Form1()
         {
             InitializeComponent();
-
+            
+            //Loading database content from all tables
             showDbContent("Customer");
             showDbContent("Movie");
             showDbContent("Rental");
@@ -25,12 +27,14 @@ namespace VideoRentalSystem
 
         private void showDbContent(string tableName)
         {
+            // Open SQL Connection
             sqlConnection.Open();
             SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(string.Format("SELECT * FROM {0}", tableName), sqlConnection);
             DataTable dataTable = new DataTable();
             sqlDataAdapter.Fill(dataTable);
             switch (tableName)
             {
+            // Fill gridview with table content
                 case "Customer":
                     customerDataGridView.DataSource = dataTable;
                     break;
@@ -49,6 +53,7 @@ namespace VideoRentalSystem
 
         private void BtnAddCustomer_Click(object sender, EventArgs e)
         {
+        // Open SQL Connection
             sqlConnection.Open();
             string query = "INSERT INTO Customer VALUES({0},'{1}','{2}','{3}','{4}');";
 
@@ -71,8 +76,11 @@ namespace VideoRentalSystem
             showDbContent("Customer");
         }
 
+
+        //Method to delete customer
         private void BtnDeleteCustomer_Click(object sender, EventArgs e)
         {
+        // Open SQL Connection
             sqlConnection.Open();
             string query = "DELETE FROM Customer WHERE customerID={0};";
 
@@ -192,9 +200,12 @@ namespace VideoRentalSystem
             sqlConnection.Close();
             showDbContent("Movie");
         }
-
+    
+    
+        //this method creates a new rental record
         private void BtnRent_Click(object sender, EventArgs e)
         {
+        // Open SQL Connection
             sqlConnection.Open();
 
 
@@ -222,7 +233,7 @@ namespace VideoRentalSystem
             sqlConnection.Close();
             showDbContent("Rental");
         }
-
+        //Saves the date of returning
         private void BtnReturn_Click(object sender, EventArgs e)
         {
             sqlConnection.Open();
@@ -247,9 +258,11 @@ namespace VideoRentalSystem
             sqlConnection.Close();
             showDbContent("Rental");
         }
-
+        
+       //These methods fetch the records with max occurences
         private void BtnMostCustomer_Click(object sender, EventArgs e)
         {
+        // Open SQL Connection
             sqlConnection.Open();
             string query = "SELECT customerIDFK, COUNT(customerIDFK) AS value_occurence FROM Rental GROUP BY customerIDFK ORDER BY value_occurence DESC;";
 
@@ -272,6 +285,7 @@ namespace VideoRentalSystem
 
         private void BtnMostMovie_Click(object sender, EventArgs e)
         {
+        // Open SQL Connection
             sqlConnection.Open();
             string query = "SELECT movieIDFK, COUNT(movieIDFK) AS value_occurence FROM Rental GROUP BY movieIDFK ORDER BY value_occurence DESC;";
 
